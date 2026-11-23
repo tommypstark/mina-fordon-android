@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -81,33 +82,43 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Box {
+            Row{
+                Box {
 
-                Button(
-                    onClick = { expanded = !expanded }  // för att kunna öppna/stänga menyn med samma knapp
+                    Button(
+                        onClick = { expanded = !expanded }  // för att kunna öppna/stänga menyn med samma knapp
 
-                ) {
-                    Text(state.newType)
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                }
-
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = {expanded = false}
-                ) {
-                    listOf("Bil", "Lastbil", "Moped", "Motorcykel").forEach { type ->
-                        DropdownMenuItem(
-                            text = { Text(type) },
-                            onClick = {
-                                viewModel.onNewTypeChange(type)
-                                expanded = false
-                            }
-                        )
+                    ) {
+                        Text(state.newType)
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                     }
 
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = {expanded = false}
+                    ) {
+                        listOf("Bil", "Lastbil", "Moped", "Motorcykel").forEach { type ->
+                            DropdownMenuItem(
+                                text = { Text(type) },
+                                onClick = {
+                                    viewModel.onNewTypeChange(type)
+                                    expanded = false
+                                }
+                            )
+                        }
 
+                    }
+                }
+
+                Button(
+                    onClick = { viewModel.addVehicle() },
+                    enabled = state.newName.isNotBlank()
+                ) {
+                    Text("Lägg till")
                 }
             }
+
+
 
             LazyColumn {
                 items(state.vehicles) { vehicle ->
