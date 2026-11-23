@@ -7,14 +7,19 @@ import androidx.lifecycle.ViewModel
 
 data class VehicleUiState(
     val newName: String = "",
+    val newType: String = "Bil",
     val vehicles: List<Vehicle> = startVehicles
 )
 
 class VehicleViewModel : ViewModel() {
     var uiState by mutableStateOf(VehicleUiState())
         private set
-
     fun onNewNameChange(text: String) {
         uiState = uiState.copy(newName = text)
     }
+
+    fun onNewTypeChange(text: String) {
+        uiState = uiState.copy(newType = text)
+    }
+
 }
