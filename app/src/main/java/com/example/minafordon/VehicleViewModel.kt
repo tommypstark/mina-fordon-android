@@ -13,4 +13,8 @@ data class VehicleUiState(
 class VehicleViewModel : ViewModel() {
     var uiState by mutableStateOf(VehicleUiState())
         private set
+
+    fun onNewNameChange(text: String) {
+        uiState = uiState.copy(newName = text)
+    }
 }

@@ -1,17 +1,20 @@
 package com.example.minafordon
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -55,9 +58,16 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier.padding(innerPadding)
-        ) {
+        Column(modifier = Modifier.padding(innerPadding)) {
+
+            TextField(
+                value = state.newName,
+                onValueChange = { viewModel.onNewNameChange(it) },
+                label = { Text("Namn") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+
             LazyColumn {
                 items(state.vehicles) { vehicle ->
                     Text(text = "${vehicle.name} - ${vehicle.type}")
@@ -68,7 +78,10 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
 }
 
 @SuppressLint("ViewModelConstructorInComposable")
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun VehicleScreenPreview() {
     MinaFordonTheme {
