@@ -48,4 +48,12 @@ class VehicleViewModel : ViewModel() {
         )
     }
 
+    fun toggleService(id: Int) {
+        uiState = uiState.copy(
+            vehicles = uiState.vehicles.map {
+                if (it.id == id) it.copy(serviceDone = !it.serviceDone) else it
+            }
+        )
+    }
+
 }
