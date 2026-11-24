@@ -9,7 +9,8 @@ import androidx.lifecycle.ViewModel
 data class VehicleUiState(
     val newName: String = "",
     val newType: String = "Bil",
-    val vehicles: List<Vehicle> = startVehicles
+    val vehicles: List<Vehicle> = startVehicles,
+    val editingId: Int? = null
 )
 
 class VehicleViewModel : ViewModel() {
@@ -59,6 +60,31 @@ class VehicleViewModel : ViewModel() {
     fun removeVehicle(id: Int) {
         uiState = uiState.copy(
             vehicles = uiState.vehicles.filter { it.id != id }
+        )
+    }
+
+    fun startEdit(vehicle: Vehicle) {
+        uiState = uiState.copy(
+            newName = vehicle.name,
+            newType = vehicle.type,
+            editingId = vehicle.id,
+        )
+    }
+
+    fun saveEdit() {
+        val name = uiState.newName.trim()
+        if (name.isEmpty()) return
+        val id = uiState.editingId
+        uiState = uiState.copy(
+            newName = "",
+            newType = "Bil",
+            editingId = null,
+            vehicles = uiState.vehicles.map {
+                if (it.id == id) it.copy(
+                    name = name,
+                    type = uiState.newType
+                ) else it
+            },
         )
     }
 
