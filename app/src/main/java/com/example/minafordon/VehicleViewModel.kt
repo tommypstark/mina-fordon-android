@@ -61,6 +61,13 @@ class VehicleViewModel : ViewModel() {
         uiState = uiState.copy(
             vehicles = uiState.vehicles.filter { it.id != id }
         )
+        if (uiState.editingId == id) {
+            uiState = uiState.copy(
+                newName = "",
+                newType = "Bil",
+                editingId = null
+            )
+        }
     }
 
     fun startEdit(vehicle: Vehicle) {
