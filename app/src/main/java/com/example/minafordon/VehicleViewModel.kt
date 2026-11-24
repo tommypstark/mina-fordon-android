@@ -56,4 +56,10 @@ class VehicleViewModel : ViewModel() {
         )
     }
 
+    fun removeVehicle(id: Int) {
+        uiState = uiState.copy(
+            vehicles = uiState.vehicles.filter { it.id != id }
+        )
+    }
+
 }

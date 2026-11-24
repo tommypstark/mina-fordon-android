@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -125,6 +127,7 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
             LazyColumn {
                 items(state.vehicles) { vehicle ->
                     Row(
+                        modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
@@ -134,6 +137,13 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
                         )
 
                         Text(text = "${vehicle.name} - ${vehicle.type}")
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        TextButton(onClick = { viewModel.removeVehicle(vehicle.id) })
+                        {
+                            Text("❌")
+                        }
                     }
 
                 }
