@@ -70,6 +70,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
     val state = viewModel.uiState
+    val serviced = state.vehicles.count { it.serviceDone }
     var expanded by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -79,7 +80,9 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
             )
         }
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
+        Column(
+            modifier = Modifier.padding(innerPadding)
+        ) {
 
             TextField(
                 value = state.newName,
@@ -133,7 +136,17 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
                 }
             }
 
+            Text(
+                text = "$serviced av ${state.vehicles.size} fordon servade",
+                modifier = Modifier.padding(12.dp)
+            )
 
+            if (state.vehicles.isEmpty()) {
+                Text(
+                    text = "Inga fordon ännu. Lägg till ditt första fordon!",
+                    modifier = Modifier.padding(start = 12.dp)
+                )
+            }
 
             LazyColumn {
                 items(state.vehicles) { vehicle ->
