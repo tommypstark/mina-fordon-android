@@ -10,7 +10,8 @@ data class VehicleUiState(
     val newName: String = "",
     val newType: String = "Bil",
     val vehicles: List<Vehicle> = startVehicles,
-    val editingId: Int? = null
+    val editingId: Int? = null,
+    val filter: String = "Alla"
 )
 
 class VehicleViewModel : ViewModel() {
@@ -93,6 +94,10 @@ class VehicleViewModel : ViewModel() {
                 ) else it
             },
         )
+    }
+
+    fun onFilterChange(filter: String) {
+        uiState = uiState.copy(filter = filter)
     }
 
 }

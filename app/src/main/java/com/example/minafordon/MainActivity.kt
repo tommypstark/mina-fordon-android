@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
@@ -70,6 +72,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
     val state = viewModel.uiState
+
+    val filtered = state.vehicles.filter {
+        when (state.filter) {
+            "Servade" -> it.serviceDone
+            "Ej servade" -> !it.serviceDone
+            else -> true
+        }
+    }
+
     val serviced = state.vehicles.count { it.serviceDone }
     var expanded by remember { mutableStateOf(false) }
 
@@ -148,8 +159,20 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
                 )
             }
 
+            val filters = listOf("Alla", "Servade", "Ej servade")
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                filters.forEach { filter ->
+                    FilterChip(
+                        selected = state.filter == filter,
+                        onClick = { viewModel.onFilterChange(filter) },
+                        label = { Text(filter) },
+                    )
+                }
+            }
+
             LazyColumn {
-                items(state.vehicles) { vehicle ->
+                items(filtered) { vehicle ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
