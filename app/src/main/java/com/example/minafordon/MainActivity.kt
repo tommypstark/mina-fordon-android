@@ -1,6 +1,5 @@
 package com.example.minafordon
 
-import android.R.attr.text
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
@@ -24,12 +23,9 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -110,12 +106,8 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
 
             Row {
                 Box {
-
                     Button(
-                        onClick = {
-                            expanded = !expanded
-                        }  // för att kunna öppna/stänga menyn med samma knapp
-
+                        onClick = { expanded = !expanded }
                     ) {
                         Text(state.newType)
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
@@ -134,7 +126,6 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
                                 }
                             )
                         }
-
                     }
                 }
 
@@ -151,6 +142,7 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
                     Text(if (state.editingId == null) "Lägg till" else "Spara")
                 }
             }
+
 
             Text(
                 text = "$serviced av ${state.vehicles.size} fordon servade",
@@ -183,40 +175,55 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
             }
 
             LazyColumn {
-                items(shown) { vehicle ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        Checkbox(
-                            checked = vehicle.serviceDone,
-                            onCheckedChange = { viewModel.toggleService(vehicle.id) }
-                        )
-
-                        Text(text = "${vehicle.name} - ${vehicle.type}")
-
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        IconButton(
-                            onClick = { viewModel.startEdit(vehicle) },
-                            modifier = Modifier.size(35.dp)
-                        ) {
-                            Text("✏️")
-                        }
-
-                        IconButton(
-                            onClick = { viewModel.removeVehicle(vehicle.id) },
-                            modifier = Modifier.size(35.dp)
-                        ) {
-                            Text("❌")
-                        }
-                    }
-
+                items(shown, key = { it.id }) { vehicle ->
+                    VehicleRow(
+                        vehicle = vehicle,
+                        onToggle = { viewModel.toggleService(vehicle.id) },
+                        onEdit = { viewModel.startEdit(vehicle) },
+                        onRemove = { viewModel.removeVehicle(vehicle.id) }
+                    )
                 }
             }
         }
     }
+}
+
+@Composable
+fun VehicleRow(
+    vehicle: Vehicle,
+    onToggle: () -> Unit,
+    onEdit: () -> Unit,
+    onRemove: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Checkbox(
+            checked = vehicle.serviceDone,
+            onCheckedChange = { onToggle() }
+        )
+
+        Text(text = "${vehicle.name} - ${vehicle.type}")
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        IconButton(
+            onClick = onEdit,
+            modifier = Modifier.size(35.dp)
+        ) {
+            Text("✏️")
+        }
+
+        IconButton(
+            onClick = onRemove,
+            modifier = Modifier.size(35.dp)
+        ) {
+            Text("❌")
+        }
+    }
+
 }
 
 @SuppressLint("ViewModelConstructorInComposable")
