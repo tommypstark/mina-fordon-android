@@ -80,6 +80,11 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
             else -> true
         }
     }
+    val shown = if (state.sortByName) {
+        filtered.sortedBy { it.name.lowercase() }
+    } else {
+        filtered
+    }
 
     val serviced = state.vehicles.count { it.serviceDone }
     var expanded by remember { mutableStateOf(false) }
@@ -169,10 +174,16 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
                         label = { Text(filter) },
                     )
                 }
+                FilterChip(
+                    selected = state.sortByName,
+                    onClick = { viewModel.toggleSort() },
+                    label = { Text("A–Ö") },
+                )
+
             }
 
             LazyColumn {
-                items(filtered) { vehicle ->
+                items(shown) { vehicle ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically

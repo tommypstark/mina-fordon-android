@@ -11,7 +11,8 @@ data class VehicleUiState(
     val newType: String = "Bil",
     val vehicles: List<Vehicle> = startVehicles,
     val editingId: Int? = null,
-    val filter: String = "Alla"
+    val filter: String = "Alla",
+    val sortByName: Boolean = false
 )
 
 class VehicleViewModel : ViewModel() {
@@ -98,6 +99,10 @@ class VehicleViewModel : ViewModel() {
 
     fun onFilterChange(filter: String) {
         uiState = uiState.copy(filter = filter)
+    }
+
+    fun toggleSort() {
+        uiState = uiState.copy(sortByName = !uiState.sortByName)
     }
 
 }
