@@ -39,6 +39,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.minafordon.ui.theme.MinaFordonTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CenterAlignedTopAppBar
 
 data class Vehicle(
     val id: Int,
@@ -87,8 +89,8 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Mina fordon \uD83D\uDE98") }
+            CenterAlignedTopAppBar(
+                title = { Text("🛵   Mina fordon   🚘") }
             )
         }
     ) { innerPadding ->
@@ -98,13 +100,16 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
 
             TextField(
                 value = state.newName,
+                shape = RoundedCornerShape(8.dp),
                 onValueChange = { viewModel.onNewNameChange(it) },
                 label = { Text("Namn") },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp)
             )
 
-            Row {
+            Row(modifier = Modifier.padding(horizontal = 12.dp)) {
                 Box {
                     Button(
                         onClick = { expanded = !expanded }
@@ -158,7 +163,10 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
 
             val filters = listOf("Alla", "Servade", "Ej servade")
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                modifier = Modifier.padding(horizontal = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 filters.forEach { filter ->
                     FilterChip(
                         selected = state.filter == filter,
