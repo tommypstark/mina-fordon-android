@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -27,7 +29,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,20 +40,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.minafordon.ui.theme.MinaFordonTheme
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CenterAlignedTopAppBar
-
-data class Vehicle(
-    val id: Int,
-    val name: String,
-    val type: String,
-    val serviceDone: Boolean = false
-)
-
-val startVehicles = listOf(
-    Vehicle(1, "Viarelli Enzo", "Moped"),
-    Vehicle(2, "KIA Xceed", "Bil", true)
-)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +65,7 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
             else -> true
         }
     }
+
     val shown = if (state.sortByName) {
         filtered.sortedBy { it.name.lowercase() }
     } else {
@@ -147,7 +135,6 @@ fun VehicleScreen(viewModel: VehicleViewModel = viewModel()) {
                     Text(if (state.editingId == null) "Lägg till" else "Spara")
                 }
             }
-
 
             Text(
                 text = "$serviced av ${state.vehicles.size} fordon servade",
@@ -231,7 +218,6 @@ fun VehicleRow(
             Text("❌")
         }
     }
-
 }
 
 @SuppressLint("ViewModelConstructorInComposable")

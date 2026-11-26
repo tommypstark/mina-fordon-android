@@ -6,10 +6,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
+data class Vehicle(
+    val id: Int,
+    val name: String,
+    val type: String,
+    val serviceDone: Boolean = false
+)
+
+val startVehicles = listOf(
+    Vehicle(1, "Viarelli Enzo", "Moped"),
+    Vehicle(2, "KIA Xceed", "Bil", true)
+)
+
 data class VehicleUiState(
+    val vehicles: List<Vehicle> = startVehicles,
     val newName: String = "",
     val newType: String = "Bil",
-    val vehicles: List<Vehicle> = startVehicles,
     val editingId: Int? = null,
     val filter: String = "Alla",
     val sortByName: Boolean = false
@@ -51,27 +63,6 @@ class VehicleViewModel : ViewModel() {
         )
     }
 
-    fun toggleService(id: Int) {
-        uiState = uiState.copy(
-            vehicles = uiState.vehicles.map {
-                if (it.id == id) it.copy(serviceDone = !it.serviceDone) else it
-            }
-        )
-    }
-
-    fun removeVehicle(id: Int) {
-        uiState = uiState.copy(
-            vehicles = uiState.vehicles.filter { it.id != id }
-        )
-        if (uiState.editingId == id) {
-            uiState = uiState.copy(
-                newName = "",
-                newType = "Bil",
-                editingId = null
-            )
-        }
-    }
-
     fun startEdit(vehicle: Vehicle) {
         uiState = uiState.copy(
             newName = vehicle.name,
@@ -93,8 +84,29 @@ class VehicleViewModel : ViewModel() {
                     name = name,
                     type = uiState.newType
                 ) else it
-            },
+            }
         )
+    }
+
+    fun toggleService(id: Int) {
+        uiState = uiState.copy(
+            vehicles = uiState.vehicles.map {
+                if (it.id == id) it.copy(serviceDone = !it.serviceDone) else it
+            }
+        )
+    }
+
+    fun removeVehicle(id: Int) {
+        uiState = uiState.copy(
+            vehicles = uiState.vehicles.filter { it.id != id }
+        )
+        if (uiState.editingId == id) {
+            uiState = uiState.copy(
+                newName = "",
+                newType = "Bil",
+                editingId = null
+            )
+        }
     }
 
     fun onFilterChange(filter: String) {
